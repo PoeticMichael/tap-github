@@ -408,6 +408,7 @@ class GitHubGraphqlStream(GraphQLStream, GitHubRestStream):
         self.logger.debug(response.json())
         self.logger.debug("After printing response")
 
-        costgen = extract_jsonpath("$.data.rateLimit.cost", input=response.json())
-        cost = next(costgen)
-        return {"rest": 0, "graphql": int(cost), "search": 0}
+        #costgen = extract_jsonpath("$.data.rateLimit.cost", input=response.json())
+        #cost = next(costgen)
+        #return {"rest": 0, "graphql": int(cost), "search": 0}
+        return {"rest": 0, "graphql": 1, "search": 0}
