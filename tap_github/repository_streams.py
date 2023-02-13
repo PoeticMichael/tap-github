@@ -1345,6 +1345,45 @@ class PullRequestCommits(GitHubRestStream):
         ),
     ).to_dict()
 
+class PullRequestFiles(GitHubRestStream):
+    name = "pull_request_files"
+    path = "/repos/{org}/{repo}/pulls/{pull_number}/files"
+    ignore_parent_replication_key = False
+    parent_stream_type = PullRequestsStream
+    state_partitioning_keys = ["repo", "org"]
+
+    def post_process(self, row: dict, context: Optional[Dict[str, str]] = None) -> dict:
+        """Add `org`,`repo`,`repo_id` and `pull_number` to the stream."""
+        if context is not None and "org" in context:
+            row["org"] = context["org"]
+        if context is not None and "repo" in context:
+            row["repo"] = context["repo"]
+        if context is not None and "repo_id" in context:
+            row["repo_id"] = context["repo_id"]
+        if context is not None and "pull_number" in context:
+            row["pull_number"] = context["pull_number"]
+        return row
+
+    schema = th.PropertiesList(
+        # Parent keys
+        th.Property("org", th.StringType),
+        th.Property("repo", th.StringType),
+        th.Property("repo_id", th.IntegerType),
+        th.Property("pull_number", th.IntegerType),
+
+        # Rest
+        th.Property("sha", th.StringType),
+        th.Property("filename", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("additions", th.IntegerType),
+        th.Property("deletions", th.IntegerType),
+        th.Property("changes", th.IntegerType),
+        th.Property("blob_url", th.StringType),
+        th.Property("row_url", th.StringType),
+        th.Property("contents_url", th.StringType),
+        th.Property("patch", th.StringType),
+        th.Property("previous_filename", th.StringType),
+    ).to_dict()
 
 class ReviewsStream(GitHubRestStream):
     name = "reviews"
