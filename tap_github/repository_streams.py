@@ -1155,8 +1155,10 @@ class PullRequestsStream(GitHubRestStream):
                 "repo": context["repo"],
                 "repo_id": context["repo_id"],
                 "pull_number": record["number"],
+                "tata": 1,
             }
         return {
+            "tata": 2,
             "pull_number": record["number"],
             "org": record["base"]["user"]["login"],
             "repo": record["base"]["repo"]["name"],
@@ -1274,6 +1276,8 @@ class PullRequestCommits(GitHubRestStream):
         th.Property("repo", th.StringType),
         th.Property("repo_id", th.IntegerType),
         th.Property("pull_number", th.IntegerType),
+        th.Property("tata", th.IntegerType),
+
         # Rest
         th.Property("url", th.StringType),
         th.Property("sha", th.StringType),
