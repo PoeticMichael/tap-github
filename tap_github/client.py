@@ -404,7 +404,6 @@ class GitHubGraphqlStream(GraphQLStream, GitHubRestStream):
         context: Optional[dict],
     ) -> Dict[str, int]:
         """Return the cost of the last graphql API call."""
-        self.logger.debug(response.json())
         costgen = extract_jsonpath("$.data.rateLimit.cost", input=response.json())
         cost = next(costgen)
         return {"rest": 0, "graphql": int(cost), "search": 0}
