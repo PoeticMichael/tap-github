@@ -186,6 +186,11 @@ class GitHubRestStream(RESTStream):
         .. _requests.Response:
             https://docs.python-requests.org/en/latest/api/#requests.Response
         """
+        
+        # Temporary measure to slow down the process in order to avoid rate limiting
+        # Real solution would be to restart processing once reset time elapsed on one of the tokens
+        time.sleep(0.72)
+
         full_path = urlparse(response.url).path
         if response.status_code in self.tolerated_http_errors:
             msg = (
